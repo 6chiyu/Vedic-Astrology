@@ -1,0 +1,110 @@
+[
+  {
+    "source_id": "nasa_jpl_de421",
+    "name": "NASA JPL DE421 Ephemeris",
+    "authority": "NASA Jet Propulsion Laboratory",
+    "layer": "astronomy",
+    "official": true,
+    "access_model": "public_reference",
+    "license": "Verify upstream NASA/JPL terms before redistribution.",
+    "canonical_url": "https://ssd.jpl.nasa.gov/planets/eph_export.html",
+    "update_frequency": "versioned releases",
+    "notes": "High-precision solar system positions for natal, transit, and timing computation."
+  },
+  {
+    "source_id": "imd_indian_astronomical_ephemeris",
+    "name": "Indian Astronomical Ephemeris",
+    "authority": "India Meteorological Department / Positional Astronomy Centre",
+    "layer": "panchanga",
+    "official": true,
+    "access_model": "publication_terms_check_required",
+    "license": "Check publication or department terms for reuse.",
+    "canonical_url": "https://mausam.imd.gov.in/imd_latest/contents/indian_astronomical_ephemeris.php",
+    "update_frequency": "annual",
+    "notes": "Government reference for tithi, nakshatra, sunrise, sunset, and eclipse tables."
+  },
+  {
+    "source_id": "iana_tzdb",
+    "name": "IANA Time Zone Database",
+    "authority": "Internet Assigned Numbers Authority",
+    "layer": "timezone",
+    "official": true,
+    "access_model": "open_reference",
+    "license": "Use upstream tz database notices when redistributing.",
+    "canonical_url": "https://www.iana.org/time-zones",
+    "update_frequency": "as needed",
+    "notes": "Canonical historical timezone and daylight-saving reference."
+  },
+  {
+    "source_id": "geonames",
+    "name": "GeoNames",
+    "authority": "GeoNames",
+    "layer": "geography",
+    "official": false,
+    "access_model": "attribution_required",
+    "license": "CC BY 4.0",
+    "canonical_url": "https://www.geonames.org/",
+    "update_frequency": "continuous",
+    "notes": "Practical source for city names, coordinates, and alternate spellings."
+  },
+  {
+    "source_id": "unicode_symbols",
+    "name": "Unicode Character Charts",
+    "authority": "Unicode Consortium",
+    "layer": "symbols",
+    "official": true,
+    "access_model": "standard_reference",
+    "license": "Check Unicode data and chart terms for packaging.",
+    "canonical_url": "https://www.unicode.org/charts/",
+    "update_frequency": "versioned releases",
+    "notes": "Reference for zodiac, planetary, hexagram, and related symbols."
+  },
+  {
+    "source_id": "britannica_tarot",
+    "name": "Encyclopaedia Britannica / Tarot",
+    "authority": "Encyclopaedia Britannica",
+    "layer": "tarot",
+    "official": false,
+    "access_model": "editorial_reference",
+    "license": "Refer to Britannica terms of use for excerpts and reuse.",
+    "canonical_url": "https://www.britannica.com/topic/tarot",
+    "update_frequency": "editorial updates",
+    "notes": "Background reference for tarot history, structure, and common deck conventions."
+  },
+  {
+    "source_id": "britannica_numerology",
+    "name": "Encyclopaedia Britannica / Numerology",
+    "authority": "Encyclopaedia Britannica",
+    "layer": "numerology",
+    "official": false,
+    "access_model": "editorial_reference",
+    "license": "Refer to Britannica terms of use for excerpts and reuse.",
+    "canonical_url": "https://www.britannica.com/topic/numerology",
+    "update_frequency": "editorial updates",
+    "notes": "Background reference for symbolism and common numerology framing."
+  },
+  {
+    "source_id": "britannica_i_ching",
+    "name": "Encyclopaedia Britannica / I Ching",
+    "authority": "Encyclopaedia Britannica",
+    "layer": "iching",
+    "official": false,
+    "access_model": "editorial_reference",
+    "license": "Refer to Britannica terms of use for excerpts and reuse.",
+    "canonical_url": "https://www.britannica.com/topic/I-Ching",
+    "update_frequency": "editorial updates",
+    "notes": "Background reference for hexagrams, divination context, and classical framing."
+  },
+  {
+    "source_id": "biddy_tarot_guide",
+    "name": "Biddy Tarot Reading Guides",
+    "authority": "Biddy Tarot",
+    "layer": "tarot_practice",
+    "official": false,
+    "access_model": "editorial_reference",
+    "license": "Refer to site terms for reuse.",
+    "canonical_url": "https://www.biddytarot.com/how-to-read-tarot-cards/",
+    "update_frequency": "editorial updates",
+    "notes": "Practical reference for spread structure, card reading flow, and user education."
+  }
+]

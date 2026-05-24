@@ -1,0 +1,16 @@
+node_modules/
+.next/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.egg-info/
+*.log
+dist/
+build/
+.env
+.env.*
+.external/
+logs/
+frontend/tsconfig.tsbuildinfo
+backend/data/saved_reports.json
+hip_main.dat
