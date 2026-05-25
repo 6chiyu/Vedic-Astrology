@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import { LanguageProvider } from "@/components/LanguageProvider";
+import LanguageProviderWrapper from "@/components/LanguageProviderWrapper";
 
 export const metadata: Metadata = {
   title: "Vedic Light | Vedic Astrology Chart",
@@ -16,15 +14,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="zh">
       <body className="min-h-screen flex flex-col">
-        <LanguageProvider>
-          <Navbar />
+        <LanguageProviderWrapper>
           <div className="flex-1">
             {children}
           </div>
-          <Footer />
-        </LanguageProvider>
+        </LanguageProviderWrapper>
       </body>
     </html>
   );

@@ -220,9 +220,15 @@ def _normalize_events(raw_events: Any) -> list[dict[str, str]]:
     return normalized
 
 
-def _normalize_dialogue_payload(raw_text: str) -> dict[str, Any]:
+FALLBACK_MESSAGES = {
+    "zh": "我会记录你刚才说的内容。为了更准确地校正出生时间，请继续添加下一个真正改变人生的事件，最好带有年份或月份。",
+    "en": "I'll note what you just said. To more accurately rectify birth time, please continue adding the next truly life-changing event, preferably with year or month.",
+    "hi": "मैं आपके अभी जिस बात को कहा है उसे नोट कर लूंगा। जन्म के समय को अधिक सटीक रूप से सुधारने के लिए, कृपया अगली वास्तविक जीवन-परिवर्तनकारी घटना जोड़ना जारी रखें, अधिमानतः वर्ष या महीने के साथ।",
+}
+
+def _normalize_dialogue_payload(raw_text: str, language: str = "zh") -> dict[str, Any]:
     fallback = {
-        "assistant_message": "I'll note what you just said. To more accurately rectify birth time, please continue adding the next truly life-changing event, preferably with year or month.",
+        "assistant_message": FALLBACK_MESSAGES.get(language, FALLBACK_MESSAGES["en"]),
         "should_continue": True,
         "confidence": "low",
         "suggested_time": "",
@@ -398,7 +404,7 @@ async def generate_birth_time_rectifier_dialogue(
     raw_text = raw_text.replace("===", "")
     raw_text = raw_text.replace("__", "")
     raw_text = raw_text.replace("~", "")
-    normalized = _normalize_dialogue_payload(raw_text)
+    normalized = _normalize_dialogue_payload(raw_text, language)
     # Clean assistant_message one more time
     if normalized.get("assistant_message"):
         normalized["assistant_message"] = normalized["assistant_message"].replace("#", "").replace("*", "").replace("**", "")

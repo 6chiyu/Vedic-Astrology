@@ -1227,40 +1227,257 @@ export default function NatalPage() {
             </form>
           </div>
 
-          <div className="glass-panel rounded-[32px] p-6 md:p-8">
-            <p className="text-xs uppercase tracking-[0.24em] text-[#A16207]">
-              {t.natalPage.premiumLogic}
-            </p>
-            <h2 className="mt-4 text-4xl leading-tight text-[#0C0A09]">
-              {t.natal.premiumTitle}
-            </h2>
-            <div className="mt-6 grid gap-3">
-              {[
-                t.natal.subtitle,
-                t.home.features.ai.title,
-                t.home.features.ai.desc
-              ].map((item) => (
-                <div
-                  className="rounded-2xl border border-black/8 bg-white/72 px-4 py-4 text-sm leading-7 text-black/68"
-                  key={item}
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
-            <button
-              className="focus-ring mt-6 inline-flex h-12 items-center gap-2 rounded-full bg-[#A16207] px-6 text-sm font-semibold text-white"
-              onClick={() => setShowPricingModal(true)}
-              type="button"
-            >
-              <Sparkles aria-hidden="true" className="h-4 w-4" />
-              {t.pricing?.standard?.cta || "查看付费方案"}
-            </button>
-          </div>
+          
         </section>
 
         {result ? (
           <>
+            <section className="mt-6 glass-panel rounded-[32px] p-6 md:p-8">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.24em] text-[#A16207]">
+                    {t.natalPage.aiReading}
+                  </p>
+                  <h3 className="mt-3 text-4xl text-[#0C0A09]">{t.result.interpretation}</h3>
+                  <p className="mt-3 text-sm leading-7 text-black/66">
+                    {t.pricing.subtitle}
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {(
+                    [
+                      ["core", t.reading.core],
+                      ["career", t.reading.career],
+                      ["love", t.reading.love],
+                    ] as [ReadingFocus, string][]
+                  ).map(([focus, label]) => (
+                    <button
+                      className={`focus-ring rounded-full px-4 py-2 text-sm font-medium ${
+                        readingFocus === focus
+                          ? "bg-[#1C1917] text-white"
+                          : "border border-black/10 bg-white/72 text-black/68"
+                      }`}
+                      disabled={!isUnlocked || isLoadingReading}
+                      key={focus}
+                      onClick={() =>
+                        void requestReading(result, focus as ReadingFocus)
+                      }
+                      type="button"
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+                {!isUnlocked && result && (
+                  <div className="mt-4 flex items-center gap-3 rounded-2xl border border-black/8 bg-white/60 px-4 py-3">
+                    <Lock aria-hidden="true" className="h-4 w-4 text-[#A16207]" />
+                    <span className="text-sm text-black/68">
+                      {t.reading.unlock}
+                    </span>
+                    <button
+                      className="ml-auto text-sm font-medium text-[#A16207]"
+                      onClick={() => setShowPricingModal(true)}
+                      type="button"
+                    >
+                      {t.pricing.standard.cta}
+                    </button>
+                  </div>
+                )}
+                {isUnlocked && (
+                  <div className="mt-4 inline-flex items-center gap-2 rounded-2xl border border-[#A16207]/20 bg-[#A16207]/8 px-4 py-2 text-sm text-[#A16207]">
+                    <Check aria-hidden="true" className="h-4 w-4" />
+                    {t.natalPage.testModeActive}
+                  </div>
+                )}
+              </div>
+
+              {isLoadingReading ? (
+                <div className="mt-6 inline-flex items-center gap-2 rounded-2xl border border-black/8 bg-white/72 px-4 py-3 text-sm text-black/60">
+                  <Loader2
+                    aria-hidden="true"
+                    className="h-4 w-4 animate-spin"
+                  />
+                  {t.natal.generating}...
+                </div>
+              ) : null}
+
+              {readingError ? (
+                <p
+                  className="mt-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+                  role="alert"
+                >
+                  {readingError}
+                </p>
+              ) : null}
+
+              {result && (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <button
+                    className="focus-ring rounded-full border border-[#A16207] px-4 py-2 text-sm font-medium text-[#A16207]"
+                    onClick={() => setIsUnlocked(!isUnlocked)}
+                    type="button"
+                  >
+                    {isUnlocked ? t.natalPage.testModeActive : t.natalPage.testUnlock}
+                  </button>
+                  {!showRectifier ? (
+                    <>
+                      {!isUnlocked && (
+                        <div className="mt-2 flex items-center gap-3 rounded-2xl border border-black/8 bg-white/60 px-4 py-3">
+                          <Lock aria-hidden="true" className="h-4 w-4 text-[#A16207]" />
+                          <span className="text-sm text-black/68">
+                            {t.rectifier.unlock} - {t.rectifier.price}
+                          </span>
+                          <span className="text-xs text-black/42">
+                            {t.rectifier.unlockDetail}
+                          </span>
+                          <button
+                            className="ml-auto text-sm font-medium text-[#A16207]"
+                            onClick={() => setShowPricingModal(true)}
+                            type="button"
+                          >
+                            立即购买
+                          </button>
+                        </div>
+                      )}
+                      <button
+                        className={`focus-ring rounded-full px-4 py-2 text-sm font-medium ${
+                          isUnlocked 
+                            ? "border border-black/10 bg-white/72 text-black/68"
+                            : "border border-black/10 bg-white/72 text-black/42 cursor-not-allowed"
+                        }`}
+                        onClick={handleStartRectifier}
+                        type="button"
+                        disabled={!isUnlocked}
+                      >
+                        {t.natalPage.startRectifier} {!isUnlocked && `(${t.rectifier.price})`}
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      className="focus-ring rounded-full border border-black/10 bg-white/72 px-4 py-2 text-sm font-medium text-black/68"
+                      onClick={() => setShowRectifier(false)}
+                      type="button"
+                    >
+                      {t.common.close}
+                    </button>
+                  )}
+                </div>
+              )}
+
+              {showRectifier && isUnlocked && result && (
+                <div className="mt-6 rounded-[28px] border border-black/8 bg-white/78 p-5">
+                  <h4 className="text-lg font-semibold text-[#0C0A09]">
+                    {t.rectifier.title}
+                  </h4>
+                  <p className="mt-2 text-sm text-black/66">
+                    {t.rectifier.timeEstimation}
+                  </p>
+
+                  {rectifierResult && (
+                    <div className="mt-4 rounded-2xl border border-[#A16207]/20 bg-[#A16207]/8 p-4">
+                      <h5 className="text-sm font-semibold text-[#A16207]">
+                        {t.rectifier.suggestedTime}
+                      </h5>
+                      <p className="mt-2 text-2xl font-bold text-[#0C0A09]">
+                        {rectifierResult.suggested_time}
+                      </p>
+                      <p className="mt-1 text-sm text-black/68">
+                        {t.rectifier.confidence}: {rectifierResult.confidence} · {t.rectifier.range}: {rectifierResult.time_range}
+                      </p>
+                      <p className="mt-2 text-sm text-black/66">
+                        {rectifierResult.summary}
+                      </p>
+                      {rectifierResult.events.length > 0 && (
+                        <div className="mt-3">
+                          <p className="text-xs text-black/56">
+                            {t.rectifier.eventsCollected.replace('{count}', String(rectifierResult.events.length))}
+                          </p>
+                          {rectifierResult.events.map((event, index) => (
+                            <div key={index} className="mt-2 grid gap-2">
+                              <input
+                                className="rounded border border-black/10 px-3 py-1 text-sm"
+                                defaultValue={event.title}
+                                type="text"
+                              />
+                              <input
+                                className="rounded border border-black/10 px-3 py-1 text-sm"
+                                defaultValue={event.date_hint}
+                                type="text"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  <div className="mt-4 max-h-96 space-y-3 overflow-y-auto">
+                    {rectifierMessages.map((message, index) => (
+                      <div
+                        key={index}
+                        className={`rounded-2xl p-3 ${
+                          message.role === "user"
+                            ? "ml-8 bg-[#A16207]/10"
+                            : "mr-8 bg-black/5"
+                        }`}
+                      >
+                        <p className="text-sm">{message.content}</p>
+                      </div>
+                    ))}
+                    {isLoadingRectifier && (
+                      <div className="flex items-center gap-2 text-sm text-black/56">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        {t.natalPage.aiAnalyzing}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="mt-4 flex gap-2">
+                    <input
+                      className="flex-1 rounded-2xl border border-black/10 bg-white/70 px-4 py-2 text-sm outline-none"
+                      onChange={(e) => setRectifierInput(e.target.value)}
+                      placeholder={t.natalPage.replyToAI}
+                      value={rectifierInput}
+                    />
+                    <button
+                      className="focus-ring rounded-full bg-[#1C1917] px-4 py-2 text-sm font-medium text-white disabled:opacity-60"
+                      disabled={!rectifierInput.trim() || isLoadingRectifier}
+                      onClick={handleSendRectifierMessage}
+                      type="button"
+                    >
+                      {t.common.confirm}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {readingResult ? (
+                <div className="mt-6 rounded-[28px] border border-black/8 bg-white/78 p-5">
+                  <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-3 text-xs uppercase tracking-[0.12em] text-black/42">
+                      <span>{t.result.dasha.title.split('Dasha')[0] || 'Model'}: {readingResult.model}</span>
+                      <span>Skill: {readingResult.skill_bundle.name}</span>
+                      <span>
+                        {readingResult.skill_bundle.mode === "deepseek"
+                          ? t.home.features.ai.title.split('AI')[0] || "DeepSeek"
+                          : "Local Fallback"}
+                      </span>
+                    </div>
+                    <button
+                      className="ml-auto focus-ring rounded-full border border-black/10 bg-white/72 px-4 py-2 text-sm font-medium text-black/68"
+                      onClick={handleExportPDF}
+                      type="button"
+                    >
+                      {t.result.download}
+                    </button>
+                  </div>
+                  <div className="mt-4 w-full whitespace-pre-line text-sm leading-8 text-black/76">
+                    {readingResult.answer}
+                  </div>
+                </div>
+              ) : null}
+            </section>
+
             <section className="mt-6 glass-panel rounded-[32px] p-6 md:p-8">
               <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
@@ -1459,254 +1676,6 @@ export default function NatalPage() {
                   {formatTimezoneOffset(result.profile.timezone_offset)}
                 </span>
               </div>
-            </section>
-
-            <section className="mt-6 pb-12">
-              <div className="glass-panel rounded-[32px] p-6 md:p-8">
-                <div className="flex items-center gap-3">
-                  <Star aria-hidden="true" className="h-5 w-5 text-[#A16207]" />
-                  <p className="text-sm font-medium text-black/70">{t.result.exploreMore}</p>
-                </div>
-                <p className="mt-4 max-w-3xl text-sm leading-7 text-black/66">
-                  {t.natal.subtitle}
-                </p>
-              </div>
-            </section>
-
-            <section className="mt-6 glass-panel rounded-[32px] p-6 md:p-8">
-              <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.24em] text-[#A16207]">
-                    {t.natalPage.aiReading}
-                  </p>
-                  <h3 className="mt-3 text-4xl text-[#0C0A09]">{t.result.interpretation}</h3>
-                  <p className="mt-3 text-sm leading-7 text-black/66">
-                    {t.pricing.subtitle}
-                  </p>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {(
-                    [
-                      ["core", t.reading.core],
-                      ["career", t.reading.career],
-                      ["love", t.reading.love],
-                    ] as [ReadingFocus, string][]
-                  ).map(([focus, label]) => (
-                    <button
-                      className={`focus-ring rounded-full px-4 py-2 text-sm font-medium ${
-                        readingFocus === focus
-                          ? "bg-[#1C1917] text-white"
-                          : "border border-black/10 bg-white/72 text-black/68"
-                      }`}
-                      disabled={!isUnlocked || isLoadingReading}
-                      key={focus}
-                      onClick={() =>
-                        void requestReading(result, focus as ReadingFocus)
-                      }
-                      type="button"
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-                {!isUnlocked && result && (
-                  <div className="mt-4 flex items-center gap-3 rounded-2xl border border-black/8 bg-white/60 px-4 py-3">
-                    <Lock aria-hidden="true" className="h-4 w-4 text-[#A16207]" />
-                    <span className="text-sm text-black/68">
-                      {t.reading.unlock}
-                    </span>
-                    <button
-                      className="ml-auto text-sm font-medium text-[#A16207]"
-                      onClick={() => setShowPricingModal(true)}
-                      type="button"
-                    >
-                      {t.pricing.standard.cta}
-                    </button>
-                  </div>
-                )}
-                {!isUnlocked && result && !showRectifier && (
-                  <div className="mt-4 flex items-center gap-3 rounded-2xl border border-black/8 bg-white/60 px-4 py-3">
-                    <Lock aria-hidden="true" className="h-4 w-4 text-black/42" />
-                    <span className="text-sm text-black/68">
-                      {t.natal.unlockPrompt}
-                    </span>
-                    <button
-                      className="ml-auto text-sm font-medium text-[#A16207]"
-                      onClick={() => setShowPricingModal(true)}
-                      type="button"
-                    >
-                      {t.pricing.standard.cta}
-                    </button>
-                  </div>
-                )}
-                {isUnlocked && (
-                  <div className="mt-4 inline-flex items-center gap-2 rounded-2xl border border-[#A16207]/20 bg-[#A16207]/8 px-4 py-2 text-sm text-[#A16207]">
-                    <Check aria-hidden="true" className="h-4 w-4" />
-                    {t.natalPage.testModeActive}
-                  </div>
-                )}
-              </div>
-
-              {isLoadingReading ? (
-                <div className="mt-6 inline-flex items-center gap-2 rounded-2xl border border-black/8 bg-white/72 px-4 py-3 text-sm text-black/60">
-                  <Loader2
-                    aria-hidden="true"
-                    className="h-4 w-4 animate-spin"
-                  />
-                  {t.natal.generating}...
-                </div>
-              ) : null}
-
-              {readingError ? (
-                <p
-                  className="mt-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
-                  role="alert"
-                >
-                  {readingError}
-                </p>
-              ) : null}
-
-              {result && (
-                <div className="mt-4 flex flex-wrap gap-2">
-                  <button
-                    className="focus-ring rounded-full border border-[#A16207] px-4 py-2 text-sm font-medium text-[#A16207]"
-                    onClick={() => setIsUnlocked(!isUnlocked)}
-                    type="button"
-                  >
-                    {isUnlocked ? t.natalPage.testModeActive : t.natalPage.testUnlock}
-                  </button>
-                  {!showRectifier ? (
-                    <button
-                      className="focus-ring rounded-full border border-black/10 bg-white/72 px-4 py-2 text-sm font-medium text-black/68"
-                      onClick={handleStartRectifier}
-                      type="button"
-                    >
-                      {t.natalPage.startRectifier}
-                    </button>
-                  ) : (
-                    <button
-                      className="focus-ring rounded-full border border-black/10 bg-white/72 px-4 py-2 text-sm font-medium text-black/68"
-                      onClick={() => setShowRectifier(false)}
-                      type="button"
-                    >
-                      {t.common.close}
-                    </button>
-                  )}
-                </div>
-              )}
-
-              {showRectifier && isUnlocked && result && (
-                <div className="mt-6 rounded-[28px] border border-black/8 bg-white/78 p-5">
-                  <h4 className="text-lg font-semibold text-[#0C0A09]">
-                    {t.rectifier.title}
-                  </h4>
-                  <p className="mt-2 text-sm text-black/66">
-                    {t.rectifier.timeEstimation}
-                  </p>
-
-                  {rectifierResult && (
-                    <div className="mt-4 rounded-2xl border border-[#A16207]/20 bg-[#A16207]/8 p-4">
-                      <h5 className="text-sm font-semibold text-[#A16207]">
-                        {t.rectifier.suggestedTime}
-                      </h5>
-                      <p className="mt-2 text-2xl font-bold text-[#0C0A09]">
-                        {rectifierResult.suggested_time}
-                      </p>
-                      <p className="mt-1 text-sm text-black/68">
-                        {t.rectifier.confidence}: {rectifierResult.confidence} · {t.rectifier.range}: {rectifierResult.time_range}
-                      </p>
-                      <p className="mt-2 text-sm text-black/66">
-                        {rectifierResult.summary}
-                      </p>
-                      {rectifierResult.events.length > 0 && (
-                        <div className="mt-3">
-                          <p className="text-xs text-black/56">
-                            {t.rectifier.eventsCollected.replace('{count}', String(rectifierResult.events.length))}
-                          </p>
-                          {rectifierResult.events.map((event, index) => (
-                            <div key={index} className="mt-2 grid gap-2">
-                              <input
-                                className="rounded border border-black/10 px-3 py-1 text-sm"
-                                defaultValue={event.title}
-                                type="text"
-                              />
-                              <input
-                                className="rounded border border-black/10 px-3 py-1 text-sm"
-                                defaultValue={event.date_hint}
-                                type="text"
-                              />
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  <div className="mt-4 max-h-96 space-y-3 overflow-y-auto">
-                    {rectifierMessages.map((message, index) => (
-                      <div
-                        key={index}
-                        className={`rounded-2xl p-3 ${
-                          message.role === "user"
-                            ? "ml-8 bg-[#A16207]/10"
-                            : "mr-8 bg-black/5"
-                        }`}
-                      >
-                        <p className="text-sm">{message.content}</p>
-                      </div>
-                    ))}
-                    {isLoadingRectifier && (
-                      <div className="flex items-center gap-2 text-sm text-black/56">
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        {t.natalPage.aiAnalyzing}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="mt-4 flex gap-2">
-                    <input
-                      className="flex-1 rounded-2xl border border-black/10 bg-white/70 px-4 py-2 text-sm outline-none"
-                      onChange={(e) => setRectifierInput(e.target.value)}
-                      placeholder={t.natalPage.replyToAI}
-                      value={rectifierInput}
-                    />
-                    <button
-                      className="focus-ring rounded-full bg-[#1C1917] px-4 py-2 text-sm font-medium text-white disabled:opacity-60"
-                      disabled={!rectifierInput.trim() || isLoadingRectifier}
-                      onClick={handleSendRectifierMessage}
-                      type="button"
-                    >
-                      {t.common.confirm}
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {readingResult ? (
-                <div className="mt-6 rounded-[28px] border border-black/8 bg-white/78 p-5">
-                  <div className="flex flex-wrap gap-2">
-                    <div className="flex flex-wrap gap-3 text-xs uppercase tracking-[0.12em] text-black/42">
-                      <span>{t.result.dasha.title.split('Dasha')[0] || 'Model'}: {readingResult.model}</span>
-                      <span>Skill: {readingResult.skill_bundle.name}</span>
-                      <span>
-                        {readingResult.skill_bundle.mode === "deepseek"
-                          ? t.home.features.ai.title.split('AI')[0] || "DeepSeek"
-                          : "Local Fallback"}
-                      </span>
-                    </div>
-                    <button
-                      className="ml-auto focus-ring rounded-full border border-black/10 bg-white/72 px-4 py-2 text-sm font-medium text-black/68"
-                      onClick={handleExportPDF}
-                      type="button"
-                    >
-                      {t.result.download}
-                    </button>
-                  </div>
-                  <div className="mt-4 w-full whitespace-pre-line text-sm leading-8 text-black/76">
-                    {readingResult.answer}
-                  </div>
-                </div>
-              ) : null}
             </section>
 
             <section className="mt-6 grid gap-6 lg:grid-cols-[0.78fr_0.22fr]">

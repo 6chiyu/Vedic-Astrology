@@ -9,10 +9,10 @@ export default function PricingPage() {
 
   const plans = [
     {
-      name: t.pricing.free.name,
-      price: t.pricing.free.price,
-      badge: t.pricing.free.badge,
-      items: t.pricing.free.features,
+      name: t.pricing.yearly.name,
+      price: t.pricing.yearly.price,
+      badge: t.pricing.yearly.badge,
+      items: t.pricing.yearly.features,
       featured: false,
     },
     {
@@ -23,10 +23,10 @@ export default function PricingPage() {
       featured: true,
     },
     {
-      name: t.pricing.yearly.name,
-      price: t.pricing.yearly.price,
-      badge: t.pricing.yearly.badge,
-      items: t.pricing.yearly.features,
+      name: t.pricing.free.name,
+      price: t.pricing.free.price,
+      badge: t.pricing.free.badge,
+      items: t.pricing.free.features,
       featured: false,
     },
   ];
@@ -59,11 +59,18 @@ export default function PricingPage() {
                 }`}
                 key={plan.name}
               >
-                <p
-                  className={`text-xs uppercase tracking-[0.18em] ${plan.featured ? "text-[#D6B66C]" : "text-[#A16207]"}`}
-                >
-                  {plan.badge}
-                </p>
+                <div className="flex items-center justify-between">
+                  <p
+                    className={`text-xs uppercase tracking-[0.18em] ${plan.featured ? "text-[#D6B66C]" : "text-[#A16207]"}`}
+                  >
+                    {plan.badge}
+                  </p>
+                  {plan.name !== t.pricing.free.name && (
+                    <span className={`text-xs px-2 py-1 rounded-full ${plan.featured ? "bg-[#D6B66C]/20 text-[#D6B66C]" : "bg-[#A16207]/10 text-[#A16207]"}`}>
+                      VIP
+                    </span>
+                  )}
+                </div>
                 <h2 className="mt-4 text-3xl">{plan.name}</h2>
                 <p className="mt-4 text-4xl">{plan.price}</p>
                 <div className="mt-6 grid gap-3">
@@ -85,7 +92,7 @@ export default function PricingPage() {
                       : "bg-[#A16207] text-white hover:bg-[#905806]"
                   }`}
                 >
-                  {t.pricing.free.cta}
+                  {plan.name === t.pricing.free.name ? t.pricing.free.cta : t.pricing.standard.cta}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </article>
@@ -106,22 +113,6 @@ export default function PricingPage() {
             >
               {t.faq.productSuggestion.cta}
             </Link>
-          </div>
-        </section>
-
-        {/* FAQ 部分 */}
-        <section className="mt-12 mb-12">
-          <div className="text-center mb-8">
-            <p className="text-xs uppercase tracking-[0.24em] text-[#A16207]">{t.faq.title}</p>
-            <h2 className="mt-4 text-4xl text-[#0C0A09]">{t.faq.title}</h2>
-          </div>
-          <div className="grid gap-4 max-w-3xl mx-auto">
-            {faqs.map((faq, index) => (
-              <div key={index} className="glass-panel rounded-[28px] p-6">
-                <h3 className="font-medium text-[#0C0A09]">{faq.q}</h3>
-                <p className="mt-2 text-sm text-black/68">{faq.a}</p>
-              </div>
-            ))}
           </div>
         </section>
       </div>

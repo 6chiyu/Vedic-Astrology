@@ -26,7 +26,7 @@ export const zh = {
       },
       ai: {
         title: "AI 深度解读",
-        desc: "结合 DeepSeek 大模型，提供个性化命运解读"
+        desc: "结合专业占星术士，提供个性化命运解读"
       },
       privacy: {
         title: "本地计算",
@@ -101,7 +101,7 @@ export const zh = {
       name: "姓名",
       namePlaceholder: "例如：小林",
       location: "出生地点",
-      locationPlaceholder: "输入位置（从大到小，如：日本 > 东京）",
+      locationPlaceholder: "输入位置（从大到小，如：国家和省）",
       date: "出生日期",
       time: "出生时间",
       latitude: "纬度",
@@ -119,7 +119,7 @@ export const zh = {
     },
     location: {
       search: "搜索位置",
-      searchHint: "提示：可以从大到小输入，如'日本' → '日本 东京' → '日本 东京 涩谷'",
+      searchHint: "提示：从大到小输入，如国家、省、市",
       results: "搜索结果",
       countries: "常用国家",
       clickToFill: "点击快速填入",
@@ -161,6 +161,18 @@ export const zh = {
     lord: "主星",
     nakshatra: "宿曜",
     pada: "帕达",
+    dignity: "尊贵度",
+    value: "值",
+    tithi: "Tithi",
+    yoga: "Yoga",
+    karana: "Karana",
+    vaara: "Vaara",
+    reading: "AI解读",
+    readingFocus: {
+      core: "核心解读",
+      career: "事业",
+      love: "感情"
+    },
     planets: "行星",
     
     tableHeaders: {
@@ -169,6 +181,7 @@ export const zh = {
       lord: "主星",
       planets: "行星",
       planet: "行星",
+      degrees: "度数",
       status: "状态",
       level: "级别",
       nakshatra: "Nakshatra",
@@ -180,12 +193,15 @@ export const zh = {
     dasha: {
       title: "Vimshottari Dasha",
       current: "当前大运",
+      currentMaha: "当前大运",
       upcoming: "即将到来的大运",
       bhukti: "Bhukti（副运）周期",
       balance: "大运余期",
       years: "年",
       mahadasha: "Mahadasha",
       antardasha: "Antardasha",
+      antar: "Antardasha",
+      pratyantardasha: "Pratyantardasha（微运）",
       moreBhukti: "还有 {count} 个 {bhukti}"
     },
     
@@ -198,6 +214,14 @@ export const zh = {
       vaara: "Vaara"
     },
     
+    readingLoading: "星体正在排列...",
+    readingLabel: "Vedic Reading",
+    poweredBy: "Powered by Vedic Wisdom",
+    languageMismatch: "语言已切换",
+    regenerate: "重新解读",
+    clickToRead: "点击按钮，探索你的星盘奥秘",
+    startReading: "开始解读",
+    
     interpretation: "深度解读",
     download: "下载报告",
     exploreMore: "继续探索"
@@ -206,11 +230,14 @@ export const zh = {
   pricing: {
     title: "定价方案",
     subtitle: "选择适合你的解读深度",
+    heading: "解锁更多功能",
+    memberOnly: "会员专享",
+    unlock: "解锁全部功能",
     free: {
       name: "免费体验",
       price: "免费",
       badge: "Basic",
-      features: ["基础星盘", "行星位置", "宫位分布", "Panchanga", "3次 AI 解读"],
+      features: ["基础星盘", "行星位置", "宫位分布", "Panchanga"],
       cta: "立即开始"
     },
     standard: {
@@ -238,7 +265,7 @@ export const zh = {
       },
       {
         q: "AI 解盘的准确性如何？",
-        a: "AI 解盘基于专业的吠陀占星知识和 DeepSeek 大模型，提供有参考价值的解读，但最终决策还需结合实际情况。"
+        a: "AI 解盘基于专业的吠陀占星知识和专业占星术士，提供有参考价值的解读，但最终决策还需结合实际情况。"
       },
       {
         q: "可以保存我的星盘吗？",
@@ -270,19 +297,30 @@ export const zh = {
     startRectifier: "Start AI Rectifier",
     closeRectifier: "Close Rectifier",
     aiAnalyzing: "AI analyzing...",
-    replyToAI: "Reply to AI"
+    replyToAI: "Reply to AI",
+    dasha: "Dasha",
+    locked: "Premium Feature",
+    lockedDetail: "This feature is available for premium users"
   },
   
   rectifier: {
-    title: "Birth Time Rectifier",
-    timeEstimation: "时间估算",
+    title: "AI 出生时间校正",
+    desc: "AI 出生时间校正",
+    subtitle: "输入关键生活事件",
+    timeRange: "时间范围",
+    estimatedTime: "估算时间",
+    placeholder: "输入生活事件，如：2018年考上大学",
+    timeEstimation: "时间估算（需要提供多个生活事件以提高准确性）",
     suggestedTime: "建议时间",
-    confidence: "Confidence",
-    range: "Range",
-    summary: "Summary",
-    eventsCollected: "{count} events collected",
-    noEvents: "No events yet",
-    initialGreeting: "你好！为了帮你校准出生时间，请先告诉我一两个真正改变你生活轨迹的事件，比如搬家、升学、重要关系变化或健康事件，尽量带上年份或月份。",
+    confidence: "置信度",
+    range: "时间范围",
+    summary: "总结",
+    eventsCollected: "已收集 {count} 个事件",
+    noEvents: "暂无事件",
+    initialGreeting: "你好！为了帮你校准出生时间，请提供尽可能多的关键生活事件，例如：升学、工作变动、婚姻、搬家、健康变化等，每个事件请尽量带上具体年份或月份。事件越多，校准结果越准确。",
+    price: "30元/次",
+    unlock: "解锁出生时间校正",
+    unlockDetail: "出生时间校正需要提供多个关键生活事件（如升学、工作变动、婚姻、搬家等），系统将基于这些事件进行AI分析。如果无法获取足够信息，结果可能不准确。",
     errorMessage: "抱歉，AI 校时暂时不可用，请稍后再试。",
     impatientHint: "请根据已有信息直接给出一个合理的出生时间推测，不需要再问更多问题了。"
   },
@@ -324,7 +362,8 @@ export const zh = {
     save: "保存",
     back: "返回",
     next: "下一步",
-    previous: "上一步"
+    previous: "上一步",
+    send: "发送"
   },
   
   language: {
@@ -368,7 +407,7 @@ export const en: TranslationKeys = {
       },
       ai: {
         title: "AI Deep Analysis",
-        desc: "Combined with DeepSeek LLM for personalized destiny interpretation"
+        desc: "Combined with professional astrologers for personalized destiny interpretation"
       },
       privacy: {
         title: "Local Processing",
@@ -443,7 +482,7 @@ export const en: TranslationKeys = {
       name: "Name",
       namePlaceholder: "e.g., Xiaolin",
       location: "Birth Place",
-      locationPlaceholder: "Enter location (from large to small, e.g., Japan > Tokyo)",
+      locationPlaceholder: "Enter location (from large to small, e.g., Country and Province)",
       date: "Birth Date",
       time: "Birth Time",
       latitude: "Latitude",
@@ -461,7 +500,7 @@ export const en: TranslationKeys = {
     },
     location: {
       search: "Search Location",
-      searchHint: "Hint: Enter from large to small, e.g., 'Japan' → 'Japan Tokyo' → 'Japan Tokyo Shibuya'",
+      searchHint: "Hint: Enter from large to small, e.g., Country, Province, City",
       results: "Search Results",
       countries: "Popular Countries",
       clickToFill: "Click to fill",
@@ -503,6 +542,18 @@ export const en: TranslationKeys = {
     lord: "Lord",
     nakshatra: "Nakshatra",
     pada: "Pada",
+    dignity: "Dignity",
+    value: "Value",
+    tithi: "Tithi",
+    yoga: "Yoga",
+    karana: "Karana",
+    vaara: "Vaara",
+    reading: "AI Reading",
+    readingFocus: {
+      core: "Core Reading",
+      career: "Career",
+      love: "Love"
+    },
     planets: "Planets",
     
     tableHeaders: {
@@ -511,6 +562,7 @@ export const en: TranslationKeys = {
       lord: "Lord",
       planets: "Planets",
       planet: "Planet",
+      degrees: "Degrees",
       status: "Status",
       level: "Level",
       nakshatra: "Nakshatra",
@@ -522,12 +574,15 @@ export const en: TranslationKeys = {
     dasha: {
       title: "Vimshottari Dasha",
       current: "Current Mahadasha",
+      currentMaha: "Current Mahadasha",
       upcoming: "Upcoming Mahadashas",
       bhukti: "Bhukti (Sub-period)",
       balance: "Balance of Dasha",
       years: "years",
       mahadasha: "Mahadasha",
       antardasha: "Antardasha",
+      antar: "Antardasha",
+      pratyantardasha: "Pratyantardasha",
       moreBhukti: "...{count} more {bhukti}"
     },
     
@@ -540,6 +595,14 @@ export const en: TranslationKeys = {
       vaara: "Vaara"
     },
     
+    readingLoading: "Stars are aligning...",
+    readingLabel: "Vedic Reading",
+    poweredBy: "Powered by Vedic Wisdom",
+    languageMismatch: "Language changed",
+    regenerate: "Regenerate",
+    clickToRead: "Click to explore your chart",
+    startReading: "Start Reading",
+    
     interpretation: "Deep Interpretation",
     download: "Download Report",
     exploreMore: "Explore More"
@@ -548,11 +611,14 @@ export const en: TranslationKeys = {
   pricing: {
     title: "Pricing Plans",
     subtitle: "Choose your depth of interpretation",
+    heading: "Unlock More Features",
+    memberOnly: "Members Only",
+    unlock: "Unlock All Features",
     free: {
       name: "Free Trial",
       price: "Free",
       badge: "Basic",
-      features: ["Basic chart", "Planet positions", "House distribution", "Panchanga", "3 AI readings"],
+      features: ["Basic chart", "Planet positions", "House distribution", "Panchanga"],
       cta: "Get Started"
     },
     standard: {
@@ -580,7 +646,7 @@ export const en: TranslationKeys = {
       },
       {
         q: "How accurate is AI interpretation?",
-        a: "AI interpretation is based on professional Vedic astrology knowledge and DeepSeek LLM, providing valuable reference interpretations, but final decisions should consider actual circumstances."
+        a: "AI interpretation is based on professional Vedic astrology knowledge and professional astrologers, providing valuable reference interpretations, but final decisions should consider actual circumstances."
       },
       {
         q: "Can I save my chart?",
@@ -612,21 +678,32 @@ export const en: TranslationKeys = {
     startRectifier: "Start AI Rectifier",
     closeRectifier: "Close Rectifier",
     aiAnalyzing: "AI analyzing...",
-    replyToAI: "Reply to AI"
+    replyToAI: "Reply to AI",
+    dasha: "Dasha",
+    locked: "Premium Feature",
+    lockedDetail: "This feature is available for premium users"
   },
   
   rectifier: {
-    title: "Birth Time Rectifier",
-    timeEstimation: "Time Estimation",
+    title: "AI Birth Time Rectifier",
+    desc: "AI Birth Time Rectification",
+    subtitle: "Enter Key Life Events",
+    timeRange: "Time Range",
+    estimatedTime: "Estimated Time",
+    placeholder: "Enter life events, e.g., Entered college in 2018",
+    timeEstimation: "Time Estimation (Multiple life events are required for better accuracy)",
     suggestedTime: "Suggested Time",
     confidence: "Confidence",
     range: "Range",
     summary: "Summary",
     eventsCollected: "{count} events collected",
     noEvents: "No events yet",
-    initialGreeting: "Hello! To help you rectify your birth time, please tell me one or two events that truly changed your life trajectory, such as moving, education changes, important relationship changes or health events, preferably with the year or month.",
+    initialGreeting: "Hello! To help you rectify your birth time, please provide as many key life events as possible, such as: education, job changes, marriage, moving, health changes, etc. For each event, please provide the year or month if possible. More events lead to more accurate results.",
     errorMessage: "Sorry, AI time rectification is temporarily unavailable. Please try again later.",
-    impatientHint: "Please directly give a reasonable birth time estimate based on the existing information, no need to ask more questions."
+    impatientHint: "Please directly give a reasonable birth time estimate based on the existing information, no need to ask more questions.",
+    price: "¥30 per use",
+    unlock: "Unlock Birth Time Rectification",
+    unlockDetail: "Birth time rectification requires multiple key life events (such as education, job changes, marriage, moving, etc.). The system will perform AI analysis based on these events. If sufficient information cannot be obtained, the results may not be accurate."
   },
   
   errors: {
@@ -666,7 +743,8 @@ export const en: TranslationKeys = {
     save: "Save",
     back: "Back",
     next: "Next",
-    previous: "Previous"
+    previous: "Previous",
+    send: "Send"
   },
   
   language: {
@@ -710,7 +788,7 @@ export const hi: TranslationKeys = {
       },
       ai: {
         title: "AI గహన విశ్లేషణ",
-        desc: "DeepSeek LLM తో కలిసి వ్యక్తిగత భాగ్య వ్యాఖ్యానం"
+        desc: "ప్రొఫెషనల్ జ్యోతిషులతో కలిసి వ్యక్తిగత భాగ్య వ్యాఖ్యానం"
       },
       privacy: {
         title: "స్థానీయ ప్రాసెసింగ్",
@@ -785,7 +863,7 @@ export const hi: TranslationKeys = {
       name: "పేరు",
       namePlaceholder: "ఉదా., శ్యామ్",
       location: "పుట్టిన ప్రదేశం",
-      locationPlaceholder: "స్థానాన్ని నమోదు చేయండి (పెద్ద నుంచి చిన్నదానికి, ఉదా., జపాన్ > టోక్యో)",
+      locationPlaceholder: "స్థానాన్ని నమోదు చేయండి (పెద్ద నుంచి చిన్నదానికి, ఉదా., దేశం మరియు ప్రాంతం)",
       date: "పుట్టిన తేదీ",
       time: "పుట్టిన సమయం",
       latitude: "అక్షాంశం",
@@ -803,7 +881,7 @@ export const hi: TranslationKeys = {
     },
     location: {
       search: "స్థానం శోధించండి",
-      searchHint: "సూచన: పెద్ద నుంచి చిన్నదానికి నమోదు చేయండి, ఉదా., 'జపాన్' → 'జపాన్ టోక్యో' → 'జపాన్ టోక్యో షిబుయా'",
+      searchHint: "సూచన: పెద్ద నుంచి చిన్నదానికి నమోదు చేయండి, ఉదా., దేశం, ప్రాంతం, నగరం",
       results: "శోధన ఫలితాలు",
       countries: "ప్రాచుర్య రంగాలు",
       clickToFill: "పూర్తి చేయడానికి క్లిక్ చేయండి",
@@ -845,6 +923,18 @@ export const hi: TranslationKeys = {
     lord: "స్వామి",
     nakshatra: "నక్షత్రం",
     pada: "పాదం",
+    dignity: "గౌరవం",
+    value: "మూల్యం",
+    tithi: "తిథి",
+    yoga: "యోగ",
+    karana: "కరణ",
+    vaara: "వార",
+    reading: "AI పాఠం",
+    readingFocus: {
+      core: "ముఖ్యమైన పాఠం",
+      career: "వృత్తి",
+      love: "ప్రేమ"
+    },
     planets: "గ్రహాలు",
     
     tableHeaders: {
@@ -853,6 +943,7 @@ export const hi: TranslationKeys = {
       lord: "స్వామి",
       planets: "గ్రహాలు",
       planet: "గ్రహం",
+      degrees: "డిగ్రీలు",
       status: "స్థితి",
       level: "స్థాయి",
       nakshatra: "నక్షత్రం",
@@ -864,12 +955,15 @@ export const hi: TranslationKeys = {
     dasha: {
       title: "విమ్షోతరీ దశ",
       current: "ప్రస్తుత మహాదశ",
+      currentMaha: "ప్రస్తుత మహాదశ",
       upcoming: "రాబోయే మహాదశలు",
       bhukti: "భుక్తి (ఉప-పీరియడ్)",
       balance: "దాశా బ్యాలెన్స్",
       years: "సంవత్సరాలు",
       mahadasha: "మహాదశ",
       antardasha: "అంతర్దశ",
+      antar: "అంతర్దశ",
+      pratyantardasha: "ప్రత్యంతర్దశ",
       moreBhukti: "...{count} మరియు {bhukti}"
     },
     
@@ -882,6 +976,14 @@ export const hi: TranslationKeys = {
       vaara: "వారం"
     },
     
+    readingLoading: "తారలు సమలేఖనం చేస్తున్నాయి...",
+    readingLabel: "వేదిక్ రీడింగ్",
+    poweredBy: "వేదిక్ విజ్ఞానం ద్వారా ప్రచారিত",
+    languageMismatch: "భాష మార్చబడింది",
+    regenerate: "పునః జనరేట్",
+    clickToRead: "మీ చార్ట్‌ను అన్వేషించడానికి క్లిక్ చేయండి",
+    startReading: "రీడింగ్ ప్రారంభించండి",
+    
     interpretation: "గహన వ్యాఖ్యానం",
     download: "రిపోర్ట్ డౌన్‌లోడ్ చేయండి",
     exploreMore: "మరిన్ని అన్వేషించండి"
@@ -890,11 +992,14 @@ export const hi: TranslationKeys = {
   pricing: {
     title: "విలువల ప్రణాళికలు",
     subtitle: "మీ వ్యాఖ్యానం లోతును ఎంచుకోండి",
+    heading: "మరిన్ని ఫీచర్లను అన్‌లాక్ చేయండి",
+    memberOnly: "మెంబర్స్ మాత్రమే",
+    unlock: "అన్ని ఫీచర్లను అన్‌లాక్ చేయండి",
     free: {
       name: "ఉచిత ప్రయత్నం",
       price: "ఉచితం",
       badge: "బేసిక్",
-      features: ["ప్రాథమిక కుండలీ", "గ్రహ స్థానాలు", "భావ పంపిణీ", "పంచాంగం", "3 AI పాఠాలు"],
+      features: ["ప్రాథమిక కుండలీ", "గ్రహ స్థానాలు", "భావ పంపిణీ", "పంచాంగం"],
       cta: "ప్రారంభించండి"
     },
     standard: {
@@ -922,7 +1027,7 @@ export const hi: TranslationKeys = {
       },
       {
         q: "AI వ్యాఖ్యానం యొక్క సటీకత ఎంత?",
-        a: "AI వ్యాఖ్యానం ప్రొఫెషనల్ వైదిక జ్యోతిష జ్ఞానం మరియు DeepSeek LLM ఆధారంగా ఉంది, విలువైన సూచన వ్యాఖ్యానాలను అందిస్తుంది, కానీ తుది నిర్ణయాలు వాస్తవ పరిస్థితులను పరిగణనలోకి తీసుకోవాలి."
+        a: "AI వ్యాఖ్యానం ప్రొఫెషనల్ వైదిక జ్యోతిష జ్ఞానం మరియు ప్రొఫెషనల్ జ్యోతిషులు ఆధారంగా ఉంది, విలువైన సూచన వ్యాఖ్యానాలను అందిస్తుంది, కానీ తుది నిర్ణయాలు వాస్తవ పరిస్థితులను పరిగణనలోకి తీసుకోవాలి."
       },
       {
         q: "నా కుండలీని సేవ్ చేయవచ్చా?",
@@ -954,21 +1059,32 @@ export const hi: TranslationKeys = {
     startRectifier: "AI సమయ సవరణను ప్రారంభించండి",
     closeRectifier: "సమయ సవరణను మూసివేయండి",
     aiAnalyzing: "AI విశ్లేషిస్తోంది...",
-    replyToAI: "AIకి సమాధానం ఇవ్వండి"
+    replyToAI: "AIకి సమాధానం ఇవ్వండి",
+    dasha: "దశ",
+    locked: "ప్రీమియం ఫీచర్",
+    lockedDetail: "ఈ ఫీచర్ ప్రీమియం వినియోగదారులకు అందుబాటులో ఉంది"
   },
   
   rectifier: {
-    title: "పుట్టిన సమయ సవరణ",
-    timeEstimation: "సమయ అంచనా",
+    title: "AI పుట్టిన సమయ సవరణ",
+    desc: "AI పుట్టిన సమయ సవరణ",
+    subtitle: "కీలక జీవన సంఘటనలను ప్రవేశపెట్టండి",
+    timeRange: "సమయ పరిధి",
+    estimatedTime: "అంచనా సమయం",
+    placeholder: "జీవన సంఘటనలను ప్రవేశపెట్టండి, ఉదా: 2018 లో కళాశాలకు ప్రవేశించారు",
+    timeEstimation: "సమయ అంచనా (నెలకు మెరుగైన ఖచ్చితత్వం కోసం మúltiple జీవన సంఘటనలు అవసరం)",
     suggestedTime: "సూచించిన సమయం",
     confidence: "విశ్వాసం",
     range: "పరిధి",
     summary: "సారాంశం",
     eventsCollected: "{count} సంఘటనలు సేకరించబడ్డాయి",
     noEvents: "ఇప్పటి వరకు ఏ సంఘటనలు లేవు",
-    initialGreeting: "నమస్తే! మీ పుట్టిన సమయాన్ని సరిచేయడంలో మీకు సహాయం చేయడానికి, మీ జీవన మార్గాన్ని నిజంగా మార్చిన ఒకటి లేదా రెండు సంఘటనలను నాకు చెప్పండి, వంటి ఇంటి మార్పు, విద్య మార్పు, ముఖ్య సంబంధ మార్పులు లేదా ఆరోగ్య సంఘటనలు, సంవత్సరం లేదా నెలతో కూడా.",
+    initialGreeting: "నమస్తే! మీ పుట్టిన సమయాన్ని సరిచేయడంలో మీకు సహాయం చేయడానికి, విద్య, ఉద్యోగ మార్పులు, వివాహం, ఇంటి మార్పు, ఆరోగ్య మార్పులు వంటి కీలక జీవన సంఘటనలను ఎంత ఎక్కువగా అందించండి. ప్రతి సంఘటనకు సంవత్సరం లేదా నెలను అందించండి. ఎక్కువ సంఘటనలు ఎక్కువ ఖచ్చితమైన ఫలితాలకు దారితీస్తాయి.",
     errorMessage: "క్షమించండి, AI సమయ సవరణ ప్రస్తుతం అందుబాటులో లేదు. దయచేసి తర్వాత మళ్ళీ ప్రయత్నించండి.",
-    impatientHint: "దయచేసి ఉనికిలో ఉన్న సమాచారం ఆధారంగా నేరుగా ఒక సహేతుకమైన పుట్టిన సమయ అంచనను ఇవ్వండి, మరిన్ని ప్రశ్నలు అడగనవసరం లేదు."
+    impatientHint: "దయచేసి ఉనికిలో ఉన్న సమాచారం ఆధారంగా నేరుగా ఒక సహేతుకమైన పుట్టిన సమయ అంచనను ఇవ్వండి, మరిన్ని ప్రశ్నలు అడగనవసరం లేదు.",
+    price: "ఒక్కసారి 30 రూపాయలు",
+    unlock: "పుట్టిన సమయ సవరణను అన్‌లాక్ చేయండి",
+    unlockDetail: "పుట్టిన సమయ సవరణకు múltiples కీలక జీవన సంఘటనలు అవసరం (విద్య, ఉద్యోగ మార్పులు, వివాహం, ఇంటి మార్పు వంటివి). సిస్టమ్ ఈ సంఘటనల ఆధారంగా AI విశ్లేషణను నిర్వహించacaktır. తగినంత సమాచారాన్ని పొందలేకపోతే, ఫలితాలు ఖచ్చితమైనవి కావచ్చు."
   },
   
   errors: {
@@ -1008,7 +1124,8 @@ export const hi: TranslationKeys = {
     save: "సేవ్ చేయండి",
     back: "వెనుకకు",
     next: "తదుపరి",
-    previous: "గత"
+    previous: "గత",
+    send: "పంపండి"
   },
   
   language: {

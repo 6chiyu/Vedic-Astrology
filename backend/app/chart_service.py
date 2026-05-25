@@ -704,11 +704,26 @@ def _extract_panchanga(raw_chart: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _calculate_duration(start_str: str, end_str: str) -> float:
+    """Calculate duration in years between two dates."""
+    try:
+        from datetime import datetime
+        start = datetime.strptime(start_str, "%Y-%m-%d")
+        end = datetime.strptime(end_str, "%Y-%m-%d")
+        duration = (end - start).days / 365.25
+        return round(duration, 1)
+    except:
+        return 0
+
 def _extract_dasha(raw_chart: dict[str, Any]) -> dict[str, Any]:
     current = _read_nested(raw_chart, "dashas.current", None)
     balance = _read_nested(raw_chart, "dashas.balance", {})
     upcoming = _read_nested(raw_chart, "dashas.upcoming", {})
     all_dashas = _read_nested(raw_chart, "dashas.all", {})
+    
+    upcoming_list = []
+    current_maha_name = None
+    
     if not isinstance(current, dict):
         return {
             "current": "未识别",
@@ -716,7 +731,7 @@ def _extract_dasha(raw_chart: dict[str, Any]) -> dict[str, Any]:
             "antardasha": None,
             "pratyantardasha": None,
             "balance": balance if isinstance(balance, dict) else {},
-            "upcoming": upcoming if isinstance(upcoming, dict) else {},
+            "upcoming": upcoming_list,
             "all": all_dashas if isinstance(all_dashas, dict) else {},
         }
 
@@ -728,23 +743,28 @@ def _extract_dasha(raw_chart: dict[str, Any]) -> dict[str, Any]:
             "antardasha": None,
             "pratyantardasha": None,
             "balance": balance if isinstance(balance, dict) else {},
-            "upcoming": upcoming if isinstance(upcoming, dict) else {},
+            "upcoming": upcoming_list,
             "all": all_dashas if isinstance(all_dashas, dict) else {},
         }
 
     maha_name, maha_payload = next(iter(mahadashas.items()))
+    current_maha_name = maha_name
     antardasha = None
     pratyantardasha = None
     current_label = f"{maha_name} Mahadasha"
 
+    all_antardashas = []
     if isinstance(maha_payload, dict):
         antardashas = maha_payload.get("antardashas")
         if isinstance(antardashas, dict) and antardashas:
             antara_name, antara_payload = next(iter(antardashas.items()))
+            start = antara_payload.get("start", "") if isinstance(antara_payload, dict) else ""
+            end = antara_payload.get("end", "") if isinstance(antara_payload, dict) else ""
             antardasha = {
                 "name": antara_name,
-                "start": antara_payload.get("start", ""),
-                "end": antara_payload.get("end", ""),
+                "start": start,
+                "end": end,
+                "duration": _calculate_duration(start, end),
             }
             current_label = f"{maha_name} / {antara_name}"
 
@@ -758,18 +778,83 @@ def _extract_dasha(raw_chart: dict[str, Any]) -> dict[str, Any]:
                         "end": praty_payload.get("end", ""),
                     }
                     current_label = f"{maha_name} / {antara_name} / {praty_name}"
+        
+        if isinstance(antardashas, dict):
+            for antara_name, antara_payload in antardashas.items():
+                if isinstance(antara_payload, dict):
+                    start = antara_payload.get("start", "")
+                    end = antara_payload.get("end", "")
+                    
+                    pratyantardashas_list = []
+                    pratyantardashas = antara_payload.get("pratyantardashas", {})
+                    if isinstance(pratyantardashas, dict):
+                        for praty_name, praty_payload in pratyantardashas.items():
+                            if isinstance(praty_payload, dict):
+                                praty_start = praty_payload.get("start", "")
+                                praty_end = praty_payload.get("end", "")
+                                
+                                sookshma_list = []
+                                sookshma = praty_payload.get("sookshma", {})
+                                if isinstance(sookshma, dict):
+                                    for sook_name, sook_payload in sookshma.items():
+                                        if isinstance(sook_payload, dict):
+                                            sook_start = sook_payload.get("start", "")
+                                            sook_end = sook_payload.get("end", "")
+                                            sookshma_list.append({
+                                                "name": sook_name,
+                                                "start": sook_start,
+                                                "end": sook_end,
+                                                "duration": _calculate_duration(sook_start, sook_end),
+                                            })
+                                
+                                pratyantardashas_list.append({
+                                    "name": praty_name,
+                                    "start": praty_start,
+                                    "end": praty_end,
+                                    "duration": _calculate_duration(praty_start, praty_end),
+                                    "sookshma": sookshma_list,
+                                })
+                    
+                    all_antardashas.append({
+                        "name": antara_name,
+                        "start": start,
+                        "end": end,
+                        "duration": _calculate_duration(start, end),
+                        "pratyantardashas": pratyantardashas_list,
+                    })
+
+    maha_start = maha_payload.get("start", "") if isinstance(maha_payload, dict) else ""
+    maha_end = maha_payload.get("end", "") if isinstance(maha_payload, dict) else ""
+    
+    all_mahadashas = all_dashas.get("mahadashas", {}) if isinstance(all_dashas, dict) else {}
+    if isinstance(all_mahadashas, dict) and current_maha_name:
+        found_current = False
+        for name, payload in all_mahadashas.items():
+            if isinstance(payload, dict):
+                if name == current_maha_name:
+                    found_current = True
+                elif found_current:
+                    start = payload.get("start", "")
+                    end = payload.get("end", "")
+                    upcoming_list.append({
+                        "name": name,
+                        "start": start,
+                        "end": end,
+                        "duration": _calculate_duration(start, end),
+                    })
 
     return {
         "current": current_label,
         "mahadasha": {
             "name": maha_name,
-            "start": maha_payload.get("start", "") if isinstance(maha_payload, dict) else "",
-            "end": maha_payload.get("end", "") if isinstance(maha_payload, dict) else "",
+            "start": maha_start,
+            "end": maha_end,
+            "duration": _calculate_duration(maha_start, maha_end),
         },
-        "antardasha": antardasha,
+        "antardasha": all_antardashas,
         "pratyantardasha": pratyantardasha,
         "balance": balance if isinstance(balance, dict) else {},
-        "upcoming": upcoming if isinstance(upcoming, dict) else {},
+        "upcoming": upcoming_list,
         "all": all_dashas if isinstance(all_dashas, dict) else {},
     }
 

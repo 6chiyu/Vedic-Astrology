@@ -1,17 +1,24 @@
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 import httpx
 
 from app.schemas import ChartReadingRequest
 
 
-DEEPSEEK_API_URL = "https://api.deepseek.com/chat/completions"
+# 类型定义
+type Language = Literal["zh", "en", "hi"]
+type Focus = Literal["core", "career", "love"]
 
-DEFAULT_QUESTIONS = {
+# API配置
+DEEPSEEK_API_URL = "https://api.deepseek.com/chat/completions"
+DEFAULT_TIMEOUT = 120.0  # 超时时间（秒）
+
+# 提示词配置
+DEFAULT_QUESTIONS: dict[Language, dict[Focus, str]] = {
     "zh": {
         "core": "请基于这张印度星盘做一份整体解读，重点说明核心性格、优势、风险和下一步观察重点。",
         "career": "请基于这张印度星盘做一份事业解读，重点说明职业结构、适合的方向、当前阶段和行动建议。",
@@ -29,7 +36,7 @@ DEFAULT_QUESTIONS = {
     },
 }
 
-SYSTEM_PROMPTS = {
+SYSTEM_PROMPTS: dict[Language, str] = {
     "zh": (
         "你是一位温和、专业的印度占星解读顾问，服务中文用户。"
         "【重要：所有回复必须100%使用中文，绝对不能使用任何其他语言的文字！】"
@@ -775,59 +782,54 @@ async def _call_deepseek(payload: ChartReadingRequest, bundle: SkillBundle, api_
 
 
 async def generate_chart_reading(payload: ChartReadingRequest) -> dict[str, Any]:
+    """生成星盘解读内容"""
     language = payload.language or "zh"
     bundle = load_skill_bundle(payload.focus, language)
     api_key = os.environ.get("DEEPSEEK_API_KEY", "").strip()
     model = os.environ.get("DEEPSEEK_MODEL", "deepseek-v4-flash").strip() or "deepseek-v4-flash"
 
     # 多语言错误信息
-    error_messages = {
+    error_messages: dict[Language, dict[str, str]] = {
         "zh": {
             "no_api_key": "未配置 DeepSeek API Key",
-            "http_error": lambda code: f"DeepSeek 接口返回 {code}",
+            "http_error": "DeepSeek 接口返回错误",
             "request_failed": "DeepSeek 请求失败"
         },
         "en": {
             "no_api_key": "DeepSeek API Key not configured",
-            "http_error": lambda code: f"DeepSeek API returned {code}",
+            "http_error": "DeepSeek API returned error",
             "request_failed": "DeepSeek request failed"
         },
         "hi": {
-            "no_api_key": "DeepSeek API Key కాన్ఫిగర్ చేయలేదు",
-            "http_error": lambda code: f"DeepSeek API {code} తిరిగి ఇచ్చింది",
-            "request_failed": "DeepSeek అభ్యర్థన విఫలమైంది"
+            "no_api_key": "DeepSeek API Key कॉन्फ़िगर नहीं है",
+            "http_error": "DeepSeek API ने त्रुटि लौटाई",
+            "request_failed": "DeepSeek अनुरोध विफल"
         }
     }
     errors = error_messages.get(language, error_messages["en"])
 
-    if not api_key:
+    def build_result(mode: str = "local-fallback", reason: str = "") -> dict[str, Any]:
+        """构建返回结果"""
         return {
-            "answer": _build_local_fallback(payload, bundle, reason=errors["no_api_key"]),
-            "model": "local-chart-reading-fallback",
+            "answer": _build_local_fallback(payload, bundle, reason=reason) if reason else _build_local_fallback(payload, bundle),
+            "model": f"local-chart-reading-fallback",
             "focus": payload.focus,
             "skill_bundle": {
                 "name": bundle.name,
                 "path": str(bundle.root) if bundle.root else "",
-                "mode": "local-fallback",
+                "mode": mode,
             },
             "references": bundle.references,
         }
 
+    # 检查 API Key
+    if not api_key:
+        return build_result(reason=errors["no_api_key"])
+
+    # 调用 DeepSeek API
     try:
         return await _call_deepseek(payload, bundle, api_key, model)
     except httpx.HTTPStatusError as exc:
-        reason = errors["http_error"](exc.response.status_code)
+        return build_result(reason=f"{errors['http_error']}: {exc.response.status_code}")
     except httpx.HTTPError:
-        reason = errors["request_failed"]
-
-    return {
-        "answer": _build_local_fallback(payload, bundle, reason=reason),
-        "model": "local-chart-reading-fallback",
-        "focus": payload.focus,
-        "skill_bundle": {
-            "name": bundle.name,
-            "path": str(bundle.root) if bundle.root else "",
-            "mode": "local-fallback",
-        },
-        "references": bundle.references,
-    }
+        return build_result(reason=errors["request_failed"])
